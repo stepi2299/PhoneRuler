@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.phoneruler.databinding.FragmentSecondBinding;
+import com.example.phoneruler.databinding.StartMeasuringBinding;
 
-public class SecondFragment extends Fragment {
+public class StartMeasuring extends Fragment {
 
-    private FragmentSecondBinding binding;
+    private StartMeasuringBinding binding;
 
     @Override
     public View onCreateView(
@@ -21,7 +21,7 @@ public class SecondFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
-        binding = FragmentSecondBinding.inflate(inflater, container, false);
+        binding = StartMeasuringBinding.inflate(inflater, container, false);
         return binding.getRoot();
 
     }
@@ -32,8 +32,16 @@ public class SecondFragment extends Fragment {
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                NavHostFragment.findNavController(SecondFragment.this)
+                NavHostFragment.findNavController(StartMeasuring.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
+            }
+        });
+
+        binding.startMeasure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavHostFragment.findNavController(StartMeasuring.this)
+                        .navigate(R.id.action_SecondFragment_to_MeasureFragment);
             }
         });
     }

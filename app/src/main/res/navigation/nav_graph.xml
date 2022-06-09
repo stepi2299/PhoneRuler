@@ -3,26 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/InputDimension">
 
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.example.phoneruler.FirstFragment"
+        android:id="@+id/InputDimension"
+        android:name="com.example.phoneruler.InputData"
         android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        tools:layout="@layout/input_data">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            app:destination="@id/StartMeasuring" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.example.phoneruler.SecondFragment"
+        android:id="@+id/StartMeasuring"
+        android:name="com.example.phoneruler.StartMeasuring"
         android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        tools:layout="@layout/start_measuring">
 
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            app:destination="@id/InputDimension" />
+        <action
+            android:id="@+id/action_SecondFragment_to_MeasureFragment"
+            app:destination="@id/Measuring" />
+    </fragment>
+    <fragment
+        android:id="@+id/Measuring"
+        android:name="com.example.phoneruler.Measuring"
+        android:label="@string/measure_fragment_label"
+        tools:layout="@layout/measuring">
+
+        <action
+            android:id="@+id/action_MeasureFragment_to_EndMeasureFragment"
+            app:destination="@id/EndMeasuring" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/EndMeasuring"
+        android:name="com.example.phoneruler.EndMeasuring"
+        android:label="@string/end_measure_fragment_label"
+        tools:layout="@layout/end_measuring">
+
+        <action
+            android:id="@+id/repeat_measurement"
+            app:destination="@id/Measuring" />
+        <action
+            android:id="@+id/correct_input_dimension"
+            app:destination="@id/InputDimension" />
     </fragment>
 </navigation>

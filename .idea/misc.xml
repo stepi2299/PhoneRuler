@@ -4,9 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/activity_main.xml" value="0.14722222222222223" />
+        <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/activity_measuring.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/content_main.xml" value="0.18" />
+        <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/end_measuring.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/fragment_first.xml" value="0.14722222222222223" />
-        <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/fragment_second.xml" value="0.14722222222222223" />
+        <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/fragment_second.xml" value="0.22" />
+        <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/input_data.xml" value="0.18958333333333333" />
+        <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/measuring.xml" value="0.25" />
+        <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/layout/start_measuring.xml" value="0.18" />
+        <entry key="..\:/Users/stepi2299/AndroidStudioProjects/PhoneRuler/app/src/main/res/menu/menu_main.xml" value="0.18958333333333333" />
       </map>
     </option>
   </component>
