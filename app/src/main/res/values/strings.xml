@@ -12,8 +12,12 @@
     <string name="stop_measuring">Stop</string>
     <string name="measure_again">Repeat</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="Input_phone_height">Input phone height: </string>
+    <string name="Input_phone_width">Input phone width: </string>
+    <string name="Input_phone_thickness">Input phone thickness: </string>
+    <string name="zero_measure">0</string>
+    <string name="angle_x_text">X angle:</string>
+    <string name="angle_y_text">Y angle:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

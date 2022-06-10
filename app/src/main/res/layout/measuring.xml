@@ -9,21 +9,62 @@
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/updating_measurement"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/hello_blank_fragment"
-        android:visibility="visible" />
+        android:id="@+id/updating_measurement_y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:textSize="130px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.689"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/angle_y_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/angle_y_text"
+        android:textSize="130px"
+        app:layout_constraintBottom_toBottomOf="@+id/updating_measurement_y"
+        app:layout_constraintEnd_toStartOf="@+id/updating_measurement_y"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/updating_measurement_y"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/updating_measurement_x"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="344dp"
+        android:textSize="130px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.689"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/angle_x_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/angle_x_text"
+        android:textSize="130px"
+        app:layout_constraintBottom_toBottomOf="@+id/updating_measurement_x"
+        app:layout_constraintEnd_toStartOf="@+id/updating_measurement_x"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/updating_measurement_x"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/stop_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="250dp"
         android:text="@string/stop_measuring"
-        app:layout_constraintBottom_toBottomOf="@+id/updating_measurement"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/angle_x_text"
+        app:layout_constraintVertical_bias="0.2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

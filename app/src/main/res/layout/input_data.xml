@@ -4,25 +4,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InputData">
+    tools:context=".InputData"
+    android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/textview_first"
-        android:layout_width="wrap_content"
+        android:id="@+id/text_height"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/Input_phone_height"
+        app:layout_constraintBottom_toBottomOf="@+id/input_height"
+        app:layout_constraintEnd_toStartOf="@+id/input_height"
+        app:layout_constraintTop_toTopOf="@+id/input_height"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/input_height"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="@string/hello_first_fragment"
-        app:layout_constraintBottom_toTopOf="@id/button_first"
+        android:layout_marginTop="180dp"
+        android:layout_marginEnd="60dp"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_width"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/Input_phone_width"
+        app:layout_constraintBottom_toBottomOf="@+id/input_width"
+        app:layout_constraintEnd_toStartOf="@+id/input_width"
+        app:layout_constraintTop_toTopOf="@+id/input_width"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/input_width"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_height" />
+
+    <TextView
+        android:id="@+id/text_thickness"
+        android:layout_width="140dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="@string/Input_phone_thickness"
+        app:layout_constraintBottom_toBottomOf="@+id/input_thickness"
+        app:layout_constraintEnd_toStartOf="@+id/input_thickness"
+        app:layout_constraintTop_toTopOf="@+id/input_thickness"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/input_thickness"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="60dp"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_width" />
 
     <Button
         android:id="@+id/button_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:text="@string/next"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_first" />
+        app:layout_constraintTop_toBottomOf="@+id/input_thickness" />
 </androidx.constraintlayout.widget.ConstraintLayout>

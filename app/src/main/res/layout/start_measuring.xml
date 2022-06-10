@@ -7,14 +7,53 @@
     tools:context=".StartMeasuring">
 
     <TextView
-        android:id="@+id/textview_second"
+        android:id="@+id/angle_y_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_second_fragment"
-        app:layout_constraintBottom_toTopOf="@id/button_second"
+        android:layout_marginTop="200dp"
+        android:text="@string/zero_measure"
+        android:textSize="130px"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.689"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/angle_y_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/angle_y_text"
+        android:textSize="130px"
+        app:layout_constraintBottom_toBottomOf="@+id/angle_y_input"
+        app:layout_constraintEnd_toStartOf="@+id/angle_y_input"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/angle_y_input"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/angle_x_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="344dp"
+        android:text="@string/zero_measure"
+        android:textSize="130px"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.689"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/angle_x_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/angle_x_text"
+        android:textSize="130px"
+        app:layout_constraintBottom_toBottomOf="@+id/angle_x_input"
+        app:layout_constraintEnd_toStartOf="@+id/angle_x_input"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/angle_x_input"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/button_second"
@@ -23,9 +62,10 @@
         android:text="@string/previous"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.813"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textview_second" />
+        app:layout_constraintTop_toBottomOf="@id/angle_x_input"
+        app:layout_constraintVertical_bias="0.2" />
 
     <Button
         android:id="@+id/start_measure"
