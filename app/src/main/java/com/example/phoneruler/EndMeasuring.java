@@ -4,66 +4,48 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.phoneruler.databinding.EndMeasuringBinding;
 import com.example.phoneruler.databinding.MeasuringBinding;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link EndMeasuring#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class EndMeasuring extends Fragment {
 
     private EndMeasuringBinding binding;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private TextView tvx, tvy;
+    private PhoneDimension phone_dimension;
+    private Float x_measure, y_measure;
 
     public EndMeasuring() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EndMeasuring.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EndMeasuring newInstance(String param1, String param2) {
-        EndMeasuring fragment = new EndMeasuring();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        phone_dimension = new ViewModelProvider(requireActivity()).get(PhoneDimension.class);
+        x_measure = phone_dimension.getX_measure().getValue();
+        y_measure = phone_dimension.getY_measure().getValue();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        tvx = binding.updatingMeasurementX;
+        tvy = binding.updatingMeasurementY;
+        tvx.setText(String.valueOf(x_measure));
+        tvy.setText(String.valueOf(y_measure));
 
         binding.comeBackAfterMeasurement.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,5 +70,11 @@ public class EndMeasuring extends Fragment {
         // Inflate the layout for this fragment
         binding = EndMeasuringBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

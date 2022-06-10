@@ -57,6 +57,8 @@ public class InputData extends Fragment {
         mThickness = binding.inputThickness;
 
         phone_dims = new ViewModelProvider(requireActivity()).get(PhoneDimension.class);
+        phone_dims.x_measure(0.0f);
+        phone_dims.y_measure(0.0f);
 
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
