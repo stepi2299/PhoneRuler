@@ -1,6 +1,7 @@
 package com.example.phoneruler;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -20,8 +21,6 @@ import android.widget.Toast;
 
 import com.example.phoneruler.databinding.MeasuringBinding;
 
-import org.w3c.dom.Text;
-
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
@@ -32,10 +31,16 @@ public class Measuring extends Fragment {
     private PhoneDimension phone_dimension;
     private Float mWidth, mHeight, mThickness;
     private SensorManager sensorManager;
-    private Sensor gyroscope;
-    private SensorEventListener gyroscopeEvent;
+    private Sensor accelerometer, magnetic_field;
+    private SensorEventListener accelerometerEvent, magnetic_fieldEvent;
     private TextView tvx, tvy;
-    private Float x_measure, y_measure;
+    private float x_measure, y_measure, final_x_measure, final_y_measure, memory_orient_angle, prev_memory_orient_angle;
+    private double x_angle_measure, y_angle_measure;
+    private int memory_orientation, current_orient;
+    private float[] force_struct = new float[3];
+    private float[] magnetic_force_struct = new float[3];
+    private float[] orientation_struct = new float[3];
+    private float [] rotation_matrix = new float[9];
 
     public Measuring() {
     }
@@ -49,10 +54,13 @@ public class Measuring extends Fragment {
         mHeight = phone_dimension.getHeightItem().getValue();
         mThickness = phone_dimension.getThicknessItem().getValue();
         sensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
-        gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        if(gyroscope == null)
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetic_field = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        memory_orient_angle = Measuring.radian_into_degrees((float)y_angle_measure);
+        prev_memory_orient_angle = Measuring.radian_into_degrees((float)y_angle_measure);;
+        if ((accelerometer == null) || (magnetic_field == null))
         {
-            Toast.makeText(this.getContext(), "Device has no gyroscope", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getContext(), "Device has no accelerometer", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -61,6 +69,10 @@ public class Measuring extends Fragment {
 
         tvx = binding.updatingMeasurementX;
         tvy = binding.updatingMeasurementY;
+        final_y_measure = 0.0f;
+        final_x_measure = 0.0f;
+        current_orient = 0;
+        memory_orientation = 0;
         binding.stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,16 +80,13 @@ public class Measuring extends Fragment {
                         .navigate(R.id.action_MeasureFragment_to_EndMeasureFragment);
             }
         });
-        gyroscopeEvent = new SensorEventListener() {
+        accelerometerEvent = new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
-                Float x_deg = Measuring.radian_into_degrees(event.values[0]);
-                Float y_deg = Measuring.radian_into_degrees(event.values[2]);
-                x_measure = (float)((int)(x_deg*100)) / 100;
-                y_measure = (float)((int)(y_deg*100)) / 100;
-                x_measure = 56.0f;
-                tvx.setText(String.valueOf(x_measure));
-                tvy.setText(String.valueOf(y_measure));
+                force_struct = event.values;
+
+                SensorManager.getRotationMatrix(rotation_matrix, null, force_struct, magnetic_force_struct);
+                SensorManager.getOrientation(rotation_matrix, orientation_struct);
             }
 
             @Override
@@ -85,6 +94,33 @@ public class Measuring extends Fragment {
 
             }
         };
+        magnetic_fieldEvent = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                magnetic_force_struct = event.values;
+
+                SensorManager.getRotationMatrix(rotation_matrix, null, force_struct, magnetic_force_struct);
+                SensorManager.getOrientation(rotation_matrix, orientation_struct);
+
+                x_angle_measure = orientation_struct[0];
+                y_angle_measure = orientation_struct[1];
+
+                calculateMeasurement();
+
+                x_measure = (float)((int)(x_measure*100)) / 100;
+                y_measure = (float)((int)(y_measure*100)) / 100;
+
+                tvx.setText(String.valueOf(final_x_measure + x_measure));
+                tvy.setText(String.valueOf(final_y_measure + y_measure));
+
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+
     }
 
     @Override
@@ -98,25 +134,66 @@ public class Measuring extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        sensorManager.registerListener(gyroscopeEvent, gyroscope, SensorManager.SENSOR_DELAY_FASTEST);
+        sensorManager.registerListener(accelerometerEvent, accelerometer, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(magnetic_fieldEvent, magnetic_field, SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(gyroscopeEvent);
-    }
-
-    public static Float radian_into_degrees(Float rad)
-    {
-        return (rad*180)/(float)Math.PI;
+        sensorManager.unregisterListener(accelerometerEvent);
+        sensorManager.unregisterListener(magnetic_fieldEvent);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        phone_dimension.x_measure(x_measure);
-        phone_dimension.y_measure(y_measure);
+        phone_dimension.x_measure(final_x_measure);
+        phone_dimension.y_measure(final_y_measure);
+    }
+
+    public static float radian_into_degrees(float rad)
+    {
+        return (rad*180)/(float)Math.PI;
+    }
+
+    public void calculateMeasurement()
+    {
+
+        int new_orient = calculate_orientation();
+        boolean add_dimension = false;
+        if (new_orient != current_orient)
+            add_dimension = true;
+        if (new_orient == 1)
+        {
+            if (add_dimension){
+                final_y_measure += mWidth;
+            }
+            y_measure = (float)Math.abs(Math.cos(y_angle_measure))*mHeight;
+            current_orient = new_orient;
+        }
+        else {
+            if (add_dimension){
+                final_y_measure += mHeight;
+            }
+            y_measure = (float)Math.abs(Math.cos(y_angle_measure))*mWidth;
+            current_orient = new_orient;
+        }
+    }
+    public int calculate_orientation()
+    {
+        float current_orient_angle = Measuring.radian_into_degrees((float)y_angle_measure);
+        if (((prev_memory_orient_angle<memory_orient_angle)&&(memory_orient_angle<current_orient_angle)&&(current_orient_angle<0))||
+                ((prev_memory_orient_angle>memory_orient_angle)&&(memory_orient_angle>current_orient_angle)&&(current_orient_angle>0))) {
+            memory_orientation = 1;
+        }
+        else if (((prev_memory_orient_angle<memory_orient_angle)&&(memory_orient_angle<current_orient_angle)&&(current_orient_angle>0))||
+                ((prev_memory_orient_angle>memory_orient_angle)&&(memory_orient_angle>current_orient_angle)&&(current_orient_angle<0))){
+            memory_orientation = 0;
+        }
+        prev_memory_orient_angle = memory_orient_angle;
+        memory_orient_angle = current_orient_angle;
+        return memory_orientation;
     }
 }

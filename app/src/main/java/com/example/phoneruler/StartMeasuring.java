@@ -29,10 +29,13 @@ public class StartMeasuring extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        PhoneDimension phone_dimension = new ViewModelProvider(requireActivity()).get(PhoneDimension.class);
 
         binding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                phone_dimension.x_measure(0.0f);
+                phone_dimension.y_measure(0.0f);
                 NavHostFragment.findNavController(StartMeasuring.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment);
             }

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.phoneruler.databinding.EndMeasuringBinding;
-import com.example.phoneruler.databinding.MeasuringBinding;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,9 +21,8 @@ import com.example.phoneruler.databinding.MeasuringBinding;
 public class EndMeasuring extends Fragment {
 
     private EndMeasuringBinding binding;
-    private TextView tvx, tvy;
-    private PhoneDimension phone_dimension;
     private Float x_measure, y_measure;
+    private PhoneDimension phone_dimension;
 
     public EndMeasuring() {
         // Required empty public constructor
@@ -42,14 +40,16 @@ public class EndMeasuring extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tvx = binding.updatingMeasurementX;
-        tvy = binding.updatingMeasurementY;
+        TextView tvx = binding.updatingMeasurementX;
+        TextView tvy = binding.updatingMeasurementY;
         tvx.setText(String.valueOf(x_measure));
         tvy.setText(String.valueOf(y_measure));
 
         binding.comeBackAfterMeasurement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                phone_dimension.x_measure(0.0f);
+                phone_dimension.y_measure(0.0f);
                 NavHostFragment.findNavController(EndMeasuring.this)
                         .navigate(R.id.correct_input_dimension);
             }
@@ -58,6 +58,8 @@ public class EndMeasuring extends Fragment {
         binding.repeatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                phone_dimension.x_measure(0.0f);
+                phone_dimension.y_measure(0.0f);
                 NavHostFragment.findNavController(EndMeasuring.this)
                         .navigate(R.id.repeat_measurement);
             }
