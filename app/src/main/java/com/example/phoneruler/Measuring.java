@@ -80,6 +80,8 @@ public class Measuring extends Fragment {
         binding.stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                phone_dimension.x_measure(final_x_measure + x_measure);
+                phone_dimension.y_measure(final_y_measure + y_measure);
                 NavHostFragment.findNavController(Measuring.this)
                         .navigate(R.id.action_MeasureFragment_to_EndMeasureFragment);
             }
@@ -155,8 +157,6 @@ public class Measuring extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        phone_dimension.x_measure(final_x_measure + x_measure);
-        phone_dimension.y_measure(final_y_measure + y_measure);
     }
 
     public static float radian_into_degrees(float rad)
@@ -186,6 +186,23 @@ public class Measuring extends Fragment {
             current_orient = new_orient;
         }
     }
+
+    public int calculate_orientation()
+    {
+        float current_orient_angle = Measuring.radian_into_degrees(y_angle_measure);
+        if (((prev_memory_orient_angle<memory_orient_angle)&&(memory_orient_angle<current_orient_angle)&&(current_orient_angle<0))||
+                ((prev_memory_orient_angle>memory_orient_angle)&&(memory_orient_angle>current_orient_angle)&&(current_orient_angle>0))) {
+            memory_orientation = 1;
+        }
+        else if (((prev_memory_orient_angle<memory_orient_angle)&&(memory_orient_angle<current_orient_angle)&&(current_orient_angle>0))||
+                ((prev_memory_orient_angle>memory_orient_angle)&&(memory_orient_angle>current_orient_angle)&&(current_orient_angle<0))){
+            memory_orientation = 0;
+        }
+        prev_memory_orient_angle = memory_orient_angle;
+        memory_orient_angle = current_orient_angle;
+        return memory_orientation;
+    }
+
     public float calculateXMeasurement()
     {
         float tmp_x_measure;
@@ -224,19 +241,4 @@ public class Measuring extends Fragment {
         return current_x_orientation;
     }
 
-    public int calculate_orientation()
-    {
-        float current_orient_angle = Measuring.radian_into_degrees(y_angle_measure);
-        if (((prev_memory_orient_angle<memory_orient_angle)&&(memory_orient_angle<current_orient_angle)&&(current_orient_angle<0))||
-                ((prev_memory_orient_angle>memory_orient_angle)&&(memory_orient_angle>current_orient_angle)&&(current_orient_angle>0))) {
-            memory_orientation = 1;
-        }
-        else if (((prev_memory_orient_angle<memory_orient_angle)&&(memory_orient_angle<current_orient_angle)&&(current_orient_angle>0))||
-                ((prev_memory_orient_angle>memory_orient_angle)&&(memory_orient_angle>current_orient_angle)&&(current_orient_angle<0))){
-            memory_orientation = 0;
-        }
-        prev_memory_orient_angle = memory_orient_angle;
-        memory_orient_angle = current_orient_angle;
-        return memory_orientation;
-    }
 }
