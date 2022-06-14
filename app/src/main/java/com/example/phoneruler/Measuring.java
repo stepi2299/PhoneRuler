@@ -34,9 +34,10 @@ public class Measuring extends Fragment {
     private Sensor accelerometer, magnetic_field;
     private SensorEventListener accelerometerEvent, magnetic_fieldEvent;
     private TextView tvx, tvy;
-    private float x_measure, y_measure, final_x_measure, final_y_measure, memory_orient_angle, prev_memory_orient_angle;
-    private double x_angle_measure, y_angle_measure;
-    private int memory_orientation, current_orient;
+    private float x_measure, y_measure, final_x_measure, final_y_measure,
+            memory_orient_angle, prev_memory_orient_angle;
+    private float x_angle_measure, y_angle_measure;
+    private int memory_orientation, current_orient, memory_x_orientation, current_x_orientation;
     private float[] force_struct = new float[3];
     private float[] magnetic_force_struct = new float[3];
     private float[] orientation_struct = new float[3];
@@ -56,8 +57,11 @@ public class Measuring extends Fragment {
         sensorManager = (SensorManager) this.getActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetic_field = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        memory_x_orientation = 1;
+        current_x_orientation = 1;
         memory_orient_angle = Measuring.radian_into_degrees((float)y_angle_measure);
-        prev_memory_orient_angle = Measuring.radian_into_degrees((float)y_angle_measure);;
+        prev_memory_orient_angle = Measuring.radian_into_degrees((float)y_angle_measure);
+
         if ((accelerometer == null) || (magnetic_field == null))
         {
             Toast.makeText(this.getContext(), "Device has no accelerometer", Toast.LENGTH_SHORT).show();
@@ -87,6 +91,11 @@ public class Measuring extends Fragment {
 
                 SensorManager.getRotationMatrix(rotation_matrix, null, force_struct, magnetic_force_struct);
                 SensorManager.getOrientation(rotation_matrix, orientation_struct);
+
+                x_angle_measure = (float)Math.atan2(event.values[1], event.values[2]);
+                x_measure = calculateXMeasurement();
+                x_measure = (float)((int)(x_measure*100)) / 100;
+                tvx.setText(String.valueOf(final_x_measure + x_measure));
             }
 
             @Override
@@ -102,15 +111,12 @@ public class Measuring extends Fragment {
                 SensorManager.getRotationMatrix(rotation_matrix, null, force_struct, magnetic_force_struct);
                 SensorManager.getOrientation(rotation_matrix, orientation_struct);
 
-                x_angle_measure = orientation_struct[0];
                 y_angle_measure = orientation_struct[1];
 
-                calculateMeasurement();
+                calculateYMeasurement();
 
-                x_measure = (float)((int)(x_measure*100)) / 100;
                 y_measure = (float)((int)(y_measure*100)) / 100;
 
-                tvx.setText(String.valueOf(final_x_measure + x_measure));
                 tvy.setText(String.valueOf(final_y_measure + y_measure));
 
             }
@@ -149,8 +155,8 @@ public class Measuring extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        phone_dimension.x_measure(final_x_measure);
-        phone_dimension.y_measure(final_y_measure);
+        phone_dimension.x_measure(final_x_measure + x_measure);
+        phone_dimension.y_measure(final_y_measure + y_measure);
     }
 
     public static float radian_into_degrees(float rad)
@@ -158,9 +164,8 @@ public class Measuring extends Fragment {
         return (rad*180)/(float)Math.PI;
     }
 
-    public void calculateMeasurement()
+    public void calculateYMeasurement()
     {
-
         int new_orient = calculate_orientation();
         boolean add_dimension = false;
         if (new_orient != current_orient)
@@ -181,9 +186,47 @@ public class Measuring extends Fragment {
             current_orient = new_orient;
         }
     }
+    public float calculateXMeasurement()
+    {
+        float tmp_x_measure;
+        int current_orientation = calculateXorientation();
+        boolean add_dimension = memory_x_orientation != current_orientation;
+
+        if (current_orientation == 1)
+        {
+            if (add_dimension){
+                final_x_measure += mThickness;
+            }
+            tmp_x_measure = (float)Math.abs(Math.cos(x_angle_measure))*mHeight;
+        }
+        else if (current_orientation == 0) {
+            if (add_dimension){
+                final_x_measure += mHeight;
+            }
+            tmp_x_measure = (float)Math.abs(Math.cos(x_angle_measure))*mThickness;
+        }
+        else
+            tmp_x_measure = (float)Math.abs(Math.cos(x_angle_measure))*mThickness;
+        memory_x_orientation = current_orientation;
+        return tmp_x_measure;
+    }
+
+    public int calculateXorientation()
+    {
+        float current_x_angle = Measuring.radian_into_degrees(x_angle_measure);
+        System.out.println(current_x_angle);
+        if (((current_x_angle > 5)&&(current_x_angle<85))||((current_x_angle > -175)&&(current_x_angle<-95))) {
+            current_x_orientation = 0;
+        }
+        else if (((current_x_angle > 95)&&(current_x_angle<175))||((current_x_angle > -85)&&(current_x_angle<-5))){
+            current_x_orientation = 1;
+        }
+        return current_x_orientation;
+    }
+
     public int calculate_orientation()
     {
-        float current_orient_angle = Measuring.radian_into_degrees((float)y_angle_measure);
+        float current_orient_angle = Measuring.radian_into_degrees(y_angle_measure);
         if (((prev_memory_orient_angle<memory_orient_angle)&&(memory_orient_angle<current_orient_angle)&&(current_orient_angle<0))||
                 ((prev_memory_orient_angle>memory_orient_angle)&&(memory_orient_angle>current_orient_angle)&&(current_orient_angle>0))) {
             memory_orientation = 1;
